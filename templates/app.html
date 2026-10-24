@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spendwise</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.dataset.nav=localStorage.getItem('nav')||''}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css"></head>
+<body class="shell">
+<nav aria-label="Main"><div class="brand"><span class="coin"></span><span class="t">Spendwise</span></div><button data-tab="dashboard"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Overview</span></button><button data-tab="transactions"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Transactions</span></button><button data-tab="budgets"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12A9 9 0 1 1 12 3v9z"/></svg><span>Budgets</span></button><button data-tab="goals"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg><span>Goals</span></button><button data-tab="recurring"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 0 1-3 3H3"/></svg><span>Recurring</span></button><button data-tab="settings"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg><span>Settings</span></button></nav>
+<div class="main">
+  <header class="top">
+    <button class="icon" id="menu" aria-label="Collapse or expand the sidebar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <h1 id="title">Overview</h1>
+    <div class="bellwrap">
+      <button class="icon" id="bell" aria-label="Notifications" aria-expanded="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><span id="badge" hidden></span></button>
+      <div class="panel" id="panel" hidden><h3>Notifications</h3><ul class="tips" id="notes"></ul><button class="btn sm" data-open="sugg" style="margin-top:.9rem;width:100%">See suggestions and actions</button></div>
+    </div>
+    <button class="icon" id="theme" aria-label="Switch between light and dark mode"></button>
+    <button class="icon" id="add" aria-label="Add a transaction"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <div class="avatar" id="avatar" title="{{ session.get('u') }}">{{ session.get('u','?')[0]|upper }}</div>
+  </header>
+  <main id="view" aria-live="polite"></main>
+</div>
+<button class="fab" data-do="POST /api/logout"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Sign out</span></button>
+<div id="scrim" hidden></div>
+<aside id="drawer" hidden role="dialog" aria-label="Smart suggestions">
+  <header><h2>Smart suggestions</h2><button class="icon" id="dclose" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <div class="seg"><button class="on" data-pane="s">Suggestions</button><button data-pane="w">What if</button></div>
+  <div id="dbody"></div>
+</aside>
+<div id="toast" role="status"></div>
+<script src="/static/app.js"></script>
+</body></html>

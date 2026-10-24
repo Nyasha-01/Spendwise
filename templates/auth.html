@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Spendwise</title><script>try{document.documentElement.dataset.theme=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css"></head>
+<body class="auth">
+<aside class="ledger">
+  <h2>Know where it goes.<br>Keep more of it.</h2>
+  <ul>
+    <li><span>Rent</span><b class="neg">-250.00</b></li>
+    <li><span>Groceries</span><b class="neg">-64.30</b></li>
+    <li><span>Airtime &amp; data</span><b class="neg">-12.00</b></li>
+    <li><span>Salary</span><b class="pos">+620.00</b></li>
+    <li class="tot"><span>Left this month</span><b>293.70</b></li>
+  </ul>
+</aside>
+<main>
+  <div class="card authcard">
+    <h1>Spendwise</h1>
+    <div class="seg" role="tablist"><button class="on" data-m="login" type="button">Sign in</button><button data-m="register" type="button">Create account</button></div>
+    <form id="f" autocomplete="on">
+      <label>Username<input name="username" autocomplete="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" autofocus></label>
+      <label>Password<span class="pw"><input id="pw" name="password" type="password" autocomplete="current-password" required minlength="8"><button type="button" id="show" class="ghost">Show</button></span></label>
+      <div id="reg" hidden>
+        <div class="meter"><i id="bar"></i></div><p class="hint" id="hint">Use 8 or more characters.</p>
+        <label>Main currency<select name="currency"><option>USD</option><option>ZWG</option><option>ZAR</option><option>EUR</option><option>GBP</option></select></label>
+      </div>
+      <p id="err" class="err" role="alert"></p>
+      <button class="btn" id="go">Sign in</button>
+    </form>
+  </div>
+</main>
+<script>
+let mode='login';const $=s=>document.querySelector(s);
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;
+ document.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));
+ $('#reg').hidden=mode==='login';$('#go').textContent=mode==='login'?'Sign in':'Create account';
+ $('#pw').autocomplete=mode==='login'?'current-password':'new-password';$('#err').textContent='';});
+$('#show').onclick=()=>{const p=$('#pw');p.type=p.type==='password'?'text':'password';$('#show').textContent=p.type==='password'?'Show':'Hide'};
+$('#pw').oninput=e=>{const v=e.target.value;let s=0;if(v.length>=8)s++;if(v.length>=12)s++;if(/[A-Z]/.test(v)&&/[a-z]/.test(v))s++;if(/\d/.test(v)&&/[^A-Za-z0-9]/.test(v))s++;
+ $('#bar').style.width=s*25+'%';$('#bar').style.background=['#C8452F','#C8452F','#E0A100','#2F8F5B','#2F8F5B'][s];
+ $('#hint').textContent=['Use 8 or more characters.','Weak. Make it longer.','Okay. Mix upper and lower case.','Good. Add a number and a symbol.','Strong.'][s];};
+$('#f').onsubmit=async e=>{e.preventDefault();$('#err').textContent='';$('#go').disabled=true;
+ try{const r=await fetch('/api/'+mode,{method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'fetch'},body:JSON.stringify(Object.fromEntries(new FormData(e.target)))});
+  const j=await r.json();if(!r.ok)throw new Error(j.error||'Something went wrong');location.reload();}
+ catch(x){$('#err').textContent=x.message}finally{$('#go').disabled=false}};
+</script></body></html>
